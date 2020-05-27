@@ -1,0 +1,22 @@
+PODS:
+  - fixed_rate_timer (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - fixed_rate_timer (from `.symlinks/plugins/fixed_rate_timer/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  fixed_rate_timer:
+    :path: ".symlinks/plugins/fixed_rate_timer/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  fixed_rate_timer: cdd9cb72f79ec060553cd010a0d315570ef99adb
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
+
+COCOAPODS: 1.8.4

@@ -1,0 +1,22 @@
+name: fixed_rate_timer_example
+description: Demonstrates how to use the fixed_rate_timer plugin.
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: ">=2.6.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  fixed_rate_timer:
+    path: ../
+
+flutter:
+  uses-material-design: true
