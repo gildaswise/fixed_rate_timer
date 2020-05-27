@@ -48,7 +48,7 @@ class FixedRateTimer {
   }
 
   Future<void> stop() async {
-    if (_isRunning) {
+    if (!_isRunning) {
       _log("FixedRateTimer is not running, ignoring stop()");
       return;
     }
