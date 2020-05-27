@@ -2,7 +2,7 @@ name: fixed_rate_timer
 description: A new flutter plugin project.
 version: 1.0.0
 author: Gildásio Filho <gildasiogx@gmail.com>
-homepage: https://gitlab.com/gildaswise/fixed_rate_timer
+homepage: https://github.com/gildaswise/fixed_rate_timer
 
 environment:
   sdk: ">=2.6.0 <3.0.0"

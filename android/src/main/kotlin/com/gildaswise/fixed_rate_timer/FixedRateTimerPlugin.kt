@@ -15,17 +15,33 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 const val NOTIFY_TASK = "com.gildaswise.fixed_rate_timer.task"
 
-class FixedRateTimerPlugin(private val channel: MethodChannel, private val context: Context): BroadcastReceiver(), MethodCallHandler {
+class FixedRateTimerPlugin: BroadcastReceiver(), FlutterPlugin, MethodCallHandler {
+  override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    val channel = MethodChannel(binding.getFlutterEngine().getDartExecutor(), "fixed_rate_timer")
+    val plugin = FixedRateTimerPlugin();
+    plugin.channel = channel
+    plugin.context = binding.applicationContext
+    channel.setMethodCallHandler(plugin);
+  }
+
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    stop()
+  }
 
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "fixed_rate_timer")
       val context = registrar.activeContext()
-      val plugin = FixedRateTimerPlugin(channel, context)
+      val plugin = FixedRateTimerPlugin()
+      plugin.channel = channel
+      plugin.context = context
       channel.setMethodCallHandler(plugin)
     }
   }
+
+  public var channel: MethodChannel? = null
+  public var context: Context? = null
 
   private var service: FixedRateTimerService? = null
   private var bound = false
@@ -55,30 +71,31 @@ class FixedRateTimerPlugin(private val channel: MethodChannel, private val conte
     when {
       intent?.action.equals(NOTIFY_TASK) -> {
         Log.v("FixedRateTimerPlugin", "Received NOTIFY_TASK")
-        channel.invokeMethod("task", null)
+        channel?.invokeMethod("task", null)
       }
     }
   }
 
   private fun start(duration: Int) {
-    val filter = IntentFilter()
-    filter.addAction(NOTIFY_TASK)
-    context.registerReceiver(this, filter)
-
-    val serviceIntent = Intent(context, FixedRateTimerService::class.java)
-    serviceIntent.putExtra("duration", duration.toLong())
-    Log.v("FixedRateTimerPlugin", "Check if bound: $bound")
-    if (!bound) {
-      Log.v("FixedRateTimerPlugin", "Starting service, duration: $duration")
-      context.startService(serviceIntent)
-      Log.v("FixedRateTimerPlugin", "Binding service")
-      context.bindService(serviceIntent, connection, BIND_AUTO_CREATE)
+    context?.let {
+      val filter = IntentFilter()
+      filter.addAction(NOTIFY_TASK)
+      it.registerReceiver(this, filter)
+      val serviceIntent = Intent(it, FixedRateTimerService::class.java)
+      serviceIntent.putExtra("duration", duration.toLong())
+      Log.v("FixedRateTimerPlugin", "Check if bound: $bound")
+      if (!bound) {
+        Log.v("FixedRateTimerPlugin", "Starting service, duration: $duration")
+        it.startService(serviceIntent)
+        Log.v("FixedRateTimerPlugin", "Binding service")
+        it.bindService(serviceIntent, connection, BIND_AUTO_CREATE)
+      }
     }
   }
 
   private fun stop() {
     service?.stop()
     service?.stopSelf()
-    context.unregisterReceiver(this)
+    context?.unregisterReceiver(this)
   }
 }
