@@ -1,14 +1,13 @@
 # fixed_rate_timer
 
-A new flutter plugin project.
+This is a pretty straightforward plugin that executes a repeating action. It works on the background on Android, as a Service, and even without a service on iOS.
 
-## Getting Started
+## Android-specific settings
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+Please add
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+<service android:enabled="true" android:name="com.gildaswise.fixed_rate_timer.FixedRateTimerService" />
+```
+
+to your app's `AndroidManifest.xml` file so the service is properly enabled.
